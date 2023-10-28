@@ -23,7 +23,7 @@ jump = False
 # Increase to decrease sensitivity
 THRESHOLD = 0.002
 # How long to hold down the key (calls to audio_callback()), depends on the audio callback frequency
-PRESS_DURATION = 5
+PRESS_DURATION = 2
 
 
 def int_or_str(text):
@@ -78,8 +78,10 @@ def audio_callback(indata, frames, time, status):
     if status:
         print(status, file=sys.stderr)
 
-    if indata[::args.downsample, mapping][0] > THRESHOLD:
-        print(indata[::args.downsample, mapping][0])
+    x = max(indata[::args.downsample, mapping])
+
+    if x > THRESHOLD:
+        print(x)
         jump = PRESS_DURATION
         keyboard.press('space')
     else:
